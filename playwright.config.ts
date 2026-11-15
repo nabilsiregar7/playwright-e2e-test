@@ -11,7 +11,7 @@ export default defineConfig({
   expect: { timeout: 7_000 },
   fullyParallel: true,
   forbidOnly: isCI,
-  retries: isCI ? 2 : 0,
+  retries: 0,
   workers: 2,
   reporter: [['list'], ['html', { open: 'never' }]],
 
@@ -19,7 +19,7 @@ export default defineConfig({
     baseURL: process.env.BASE_URL || 'https://app.sleekflow.io',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
     actionTimeout: 10_000,
     launchOptions: { slowMo: Number(process.env.SLOW_MO) || 0 },
   },
