@@ -91,33 +91,15 @@ It uses plus-addressing (`user+qa123@gmail.com`), so every run gets a
 fresh address while all the mail lands in one inbox. With a proper test environment I'd go further and delete the
 user through an admin API in an `afterEach`.
 
-## Things to know about running against production
-
-Auth0 has bot and brute-force protection, and repeated runs will trigger it:
-
-- after enough attempts from one IP will get a **CAPTCHA**. The tests don't
-  try to get around it. They fail with a clear "Blocked by Auth0 CAPTCHA"
-  message instead of a confusing timeout.
-- after ~10 failed logins for the **same email**, Auth0 blocks that email.
-  That's why the unknown-user tests generate a new email each run. It also
-  means the wrong-password test, if run over and over, can lock the real
-  `LOGIN_EMAIL` account.
-
 ## CI
 
 `.github/workflows/playwright.yml` runs the suite on pushes to `master` and on
-pull requests, and can also be started by hand from the Actions tab. Add `LOGIN_EMAIL`,
-`LOGIN_PASSWORD`, `SIGNUP_EMAIL_BASE` (and optionally `BASE_URL`) as repository
-secrets. Without them, the credential-dependent tests just skip.
-
-On CI, failed tests are retried twice. The HTML report is always uploaded as an
-artifact, and `test-results/` (screenshots, videos, traces) is uploaded when
-something fails.
+pull requests, and can also be started by hand from the Actions tab
 
 ## When a test fails
 
 The config keeps a **screenshot** and a **video** of every failed test and
-records a **trace** on the first retry. Open them with:
+records a **trace** on every failure. Open them with:
 
 ```bash
 npm run report
